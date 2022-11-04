@@ -8,7 +8,7 @@ h1 {
 </style>
 <div>
   <h1>About (shadow DOM)</h1>
-  <a href='/'>Home</a>
+  <a href='/wc-micro-frontends'>Home</a>
 </div>
 `;
 

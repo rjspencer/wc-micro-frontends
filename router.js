@@ -14,8 +14,7 @@ const routes = {
   }
 };
 
-
-function createRouter() {
+function createRouter(basePath) {
   let currentPath = null;
   let root = document.getElementById('root');
   
@@ -50,25 +49,31 @@ function createRouter() {
 
     if (typeof route === 'object') { 
       currentPath = newPath;
-      window.history.pushState({}, '', newPath)
-      route.script && addScript(route.script)
+      window.history.pushState({}, '', basePath + '/' + newPath)
+      if (route.script) {
+        if (/http(s)?:\/\//.test(route.script)) {
+          addScript(route.script)
+        } else {
+          addScript(basePath + '/' + route.script)
+        }
+      }
       root.innerHTML = route.tag 
     } else {
       currentPath = newPath;
-      window.history.pushState({}, '', newPath)
+      window.history.pushState({}, '', basePath + '/' + newPath)
       root.replaceChildren(route(routeTo))
     }
   }
   
   function onLoad() {
-    const newPath = window.location.pathname.split('/')[1]
+    const newPath = window.location.pathname.replace(basePath, '').split('/')[1]
     routeTo(newPath)
   }
 
   return onLoad
 };
 
-const router = createRouter()
+const router = createRouter('/wc-micro-frontends')
 window.addEventListener('load', router);
 
 // function benchmark(fn, iterations = 1000) {
